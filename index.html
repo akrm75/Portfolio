@@ -1,0 +1,2820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akrm Youssef | Game Developer Portfolio</title>
+    <link rel="icon" href="logo.jpg" type="image/jpeg">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ========== CSS RESET & VARIABLES ========== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: #1a1a1a;
+            --bg-card-hover: #222222;
+            --neon-green: #39ff14;
+            --neon-green-dim: #2bcc0f;
+            --neon-green-glow: rgba(57, 255, 20, 0.4);
+            --neon-green-subtle: rgba(57, 255, 20, 0.1);
+            --neon-green-border: rgba(57, 255, 20, 0.3);
+            --text-primary: #e0e0e0;
+            --text-secondary: #8a8a8a;
+            --text-dim: #555555;
+            --slate: #2a2d35;
+            --slate-light: #3a3d45;
+            --white: #ffffff;
+            --font-heading: 'Orbitron', sans-serif;
+            --font-body: 'Rajdhani', sans-serif;
+            --font-mono: 'Roboto Mono', monospace;
+            --section-padding: 100px 0;
+            --border-radius: 4px;
+            --transition-fast: 0.2s ease;
+            --transition-med: 0.3s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--neon-green) var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--neon-green-dim); border-radius: 3px; }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 17px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ========== CRT SCANLINE OVERLAY ========== */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.03) 0px,
+                rgba(0, 0, 0, 0.03) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+            animation: crtFlicker 8s infinite;
+        }
+
+        @keyframes crtFlicker {
+            0%, 100% { opacity: 0.4; }
+            3% { opacity: 0.35; }
+            6% { opacity: 0.45; }
+            9% { opacity: 0.3; }
+            10% { opacity: 0.4; }
+            50% { opacity: 0.4; }
+            52% { opacity: 0.5; }
+            53% { opacity: 0.35; }
+            54% { opacity: 0.4; }
+        }
+
+        /* ========== GLITCH ANIMATION ========== */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes glitchText {
+            0% { clip-path: inset(40% 0 61% 0); transform: translate(-2px, 0); }
+            20% { clip-path: inset(92% 0 1% 0); transform: translate(2px, 0); }
+            40% { clip-path: inset(43% 0 1% 0); transform: translate(-1px, 0); }
+            60% { clip-path: inset(25% 0 58% 0); transform: translate(1px, 0); }
+            80% { clip-path: inset(54% 0 7% 0); transform: translate(-2px, 0); }
+            100% { clip-path: inset(58% 0 43% 0); transform: translate(0); }
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { box-shadow: 0 0 5px var(--neon-green-glow), 0 0 10px var(--neon-green-glow), inset 0 0 5px var(--neon-green-subtle); }
+            50% { box-shadow: 0 0 10px var(--neon-green-glow), 0 0 20px var(--neon-green-glow), 0 0 40px rgba(57,255,20,0.15), inset 0 0 10px var(--neon-green-subtle); }
+        }
+
+        @keyframes textGlow {
+            0%, 100% { text-shadow: 0 0 5px var(--neon-green-glow), 0 0 10px var(--neon-green-glow); }
+            50% { text-shadow: 0 0 10px var(--neon-green-glow), 0 0 20px var(--neon-green-glow), 0 0 40px rgba(57,255,20,0.2); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes borderDraw {
+            0% { width: 0; }
+            100% { width: 60px; }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========== UTILITY CLASSES ========== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header h2 .accent {
+            color: var(--neon-green);
+            animation: textGlow 3s ease-in-out infinite;
+        }
+
+        .section-header .section-tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--neon-green);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .section-header .underline {
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--neon-green);
+            margin: 20px auto 0;
+            box-shadow: 0 0 10px var(--neon-green-glow);
+        }
+
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========== NAVIGATION ========== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all var(--transition-med);
+            background: transparent;
+        }
+
+        .nav.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--neon-green-border);
+            padding: 10px 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .nav-logo img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green-glow);
+        }
+
+        .nav-logo span {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--neon-green);
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 3px;
+            white-space: nowrap;
+        }
+
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 6px 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            transition: color var(--transition-fast);
+            border: 1px solid transparent;
+            border-radius: var(--border-radius);
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--neon-green);
+            border-color: var(--neon-green-border);
+            background: var(--neon-green-subtle);
+        }
+
+        .nav-utils {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 1px;
+            background: var(--neon-green);
+            transition: width var(--transition-med);
+        }
+
+        .nav-links a:hover::after { width: 80%; }
+
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .mobile-toggle span {
+            width: 25px;
+            height: 2px;
+            background: var(--neon-green);
+            transition: all var(--transition-med);
+        }
+
+        .mobile-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .mobile-toggle.active span:nth-child(2) { opacity: 0; }
+        .mobile-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        /* ========== HERO / HOME SECTION ========== */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 50% 50%, rgba(57, 255, 20, 0.03) 0%, transparent 70%);
+        }
+
+        .hero-bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(57, 255, 20, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(57, 255, 20, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% { opacity: 0; transform: translateY(100vh) scale(0); }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { opacity: 0; transform: translateY(-10vh) scale(1); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+
+        .hero-logo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            border: 3px solid var(--neon-green);
+            box-shadow: 0 0 20px var(--neon-green-glow), 0 0 40px rgba(57,255,20,0.15);
+            animation: neonPulse 3s ease-in-out infinite;
+            display: block;
+        }
+
+        .hero-status {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--neon-green);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .hero-status .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 10px var(--neon-green-glow);
+            animation: blink 1.5s infinite;
+        }
+
+        .hero-name {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--white);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .hero-name .green { color: var(--neon-green); }
+
+        .hero-title {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            font-weight: 400;
+        }
+
+        .hero-typing-wrapper {
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            color: var(--neon-green);
+            max-width: 650px;
+            margin: 0 auto 40px;
+            min-height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-typing {
+            display: inline;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.1em;
+            background: var(--neon-green);
+            margin-left: 2px;
+            animation: blink 0.7s infinite;
+            vertical-align: middle;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 14px 35px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: var(--border-radius);
+            transition: all var(--transition-med);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--neon-green);
+            color: var(--bg-primary);
+            border: 2px solid var(--neon-green);
+            box-shadow: 0 0 15px var(--neon-green-glow);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--neon-green);
+            box-shadow: 0 0 25px var(--neon-green-glow), 0 0 50px rgba(57,255,20,0.15);
+            transform: scale(1.05);
+            animation: glitch 0.3s ease;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--neon-green);
+            border: 2px solid var(--neon-green-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px var(--neon-green-glow);
+            transform: scale(1.05);
+            animation: glitch 0.3s ease;
+        }
+
+        .hero-scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-dim);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .hero-scroll-indicator .arrow {
+            width: 20px;
+            height: 20px;
+            border-right: 2px solid var(--neon-green);
+            border-bottom: 2px solid var(--neon-green);
+            transform: rotate(45deg);
+            opacity: 0.5;
+        }
+
+        /* ========== ABOUT SECTION ========== */
+        #about {
+            padding: var(--section-padding);
+            background: var(--bg-secondary);
+            position: relative;
+        }
+
+        #about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-image-wrapper {
+            position: relative;
+        }
+
+        .about-image-frame {
+            position: relative;
+            padding: 20px;
+            border: 1px solid var(--neon-green-border);
+            border-radius: var(--border-radius);
+            background: var(--bg-card);
+        }
+
+        .about-image-frame::before,
+        .about-image-frame::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-color: var(--neon-green);
+            border-style: solid;
+        }
+
+        .about-image-frame::before {
+            top: -2px;
+            left: -2px;
+            border-width: 2px 0 0 2px;
+        }
+
+        .about-image-frame::after {
+            bottom: -2px;
+            right: -2px;
+            border-width: 0 2px 2px 0;
+        }
+
+        .about-image-frame img {
+            width: 100%;
+            border-radius: var(--border-radius);
+            filter: grayscale(20%);
+            transition: filter var(--transition-med);
+        }
+
+        .about-image-frame:hover img { filter: grayscale(0%); }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 15px 10px;
+            border: 1px solid var(--neon-green-border);
+            border-radius: var(--border-radius);
+            background: var(--bg-card);
+        }
+
+        .stat-box .stat-num {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--neon-green);
+            font-weight: 700;
+        }
+
+        .stat-box .stat-label {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .about-text h3 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .about-text h3 .accent { color: var(--neon-green); }
+
+        .about-text p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+
+        .about-terminal {
+            background: var(--bg-primary);
+            border: 1px solid var(--slate-light);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            margin-top: 25px;
+        }
+
+        .about-terminal .terminal-header {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--slate);
+        }
+
+        .about-terminal .terminal-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .about-terminal .terminal-dot.red { background: #ff5f56; }
+        .about-terminal .terminal-dot.yellow { background: #ffbd2e; }
+        .about-terminal .terminal-dot.green { background: #27c93f; }
+
+        .about-terminal .terminal-line {
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .about-terminal .terminal-line .prompt {
+            color: var(--neon-green);
+        }
+
+        .about-terminal .terminal-line .value {
+            color: var(--text-primary);
+        }
+
+        /* ========== EDUCATION SECTION ========== */
+        #education {
+            padding: var(--section-padding);
+            background: var(--bg-primary);
+        }
+
+        .education-timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .education-timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--neon-green), var(--neon-green-border), transparent);
+        }
+
+        .edu-card {
+            position: relative;
+            margin-left: 70px;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: var(--bg-card);
+            border: 1px solid var(--slate);
+            border-radius: var(--border-radius);
+            transition: all var(--transition-med);
+        }
+
+        .edu-card:hover {
+            border-color: var(--neon-green-border);
+            box-shadow: 0 0 20px rgba(57,255,20,0.08);
+            transform: translateX(5px);
+        }
+
+        .edu-card::before {
+            content: '';
+            position: absolute;
+            left: -49px;
+            top: 35px;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--neon-green);
+            background: var(--bg-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-green-glow);
+        }
+
+        .edu-date {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--neon-green);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .edu-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: var(--white);
+            margin-bottom: 5px;
+        }
+
+        .edu-card .edu-institution {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .edu-card .edu-grade {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--neon-green-dim);
+            padding: 4px 12px;
+            background: var(--neon-green-subtle);
+            border: 1px solid var(--neon-green-border);
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* ========== SKILLS SECTION ========== */
+        #skills {
+            padding: var(--section-padding);
+            background: var(--bg-secondary);
+            position: relative;
+        }
+
+        #skills::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+        }
+
+        .skill-category {
+            background: var(--bg-card);
+            border: 1px solid var(--slate);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            transition: all var(--transition-med);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-green), transparent);
+        }
+
+        .skill-category:hover {
+            border-color: var(--neon-green-border);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 15px rgba(57,255,20,0.05);
+        }
+
+        .skill-category-icon {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .skill-category h3 {
+            font-family: var(--font-heading);
+            font-size: 0.95rem;
+            color: var(--neon-green);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .skill-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-chip {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border: 1px solid var(--neon-green-border);
+            border-radius: 3px;
+            background: transparent;
+            transition: all var(--transition-fast);
+            cursor: default;
+            position: relative;
+        }
+
+        .skill-chip:hover {
+            color: var(--neon-green);
+            border-color: var(--neon-green);
+            background: var(--neon-green-subtle);
+            box-shadow: 0 0 10px var(--neon-green-glow);
+            transform: scale(1.05);
+            animation: glitch 0.25s ease;
+        }
+
+        .skill-chip.proficient {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+        }
+
+        /* ========== EXPERIENCE SECTION ========== */
+        #experience {
+            padding: var(--section-padding);
+            background: var(--bg-primary);
+        }
+
+        .experience-card {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--slate);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: all var(--transition-med);
+        }
+
+        .experience-card:hover {
+            border-color: var(--neon-green-border);
+            box-shadow: 0 0 30px rgba(57,255,20,0.06);
+        }
+
+        .exp-header {
+            padding: 30px;
+            border-bottom: 1px solid var(--slate);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .exp-header-left h3 {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            color: var(--white);
+            margin-bottom: 5px;
+        }
+
+        .exp-header-left .exp-company {
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            color: var(--neon-green);
+        }
+
+        .exp-header-right {
+            text-align: right;
+        }
+
+        .exp-header-right .exp-date {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+
+        .exp-header-right .exp-status {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--neon-green);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            justify-content: flex-end;
+            margin-top: 5px;
+        }
+
+        .exp-header-right .exp-status .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        .exp-body {
+            padding: 30px;
+        }
+
+        .car-item {
+            margin-bottom: 30px;
+            padding-left: 20px;
+            border-left: 2px solid var(--neon-green-border);
+        }
+
+        .car-item:last-child { margin-bottom: 0; }
+
+        .car-item .car-label {
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            color: var(--neon-green);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .car-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        /* ========== SERVICES SECTION ========== */
+        #services {
+            padding: var(--section-padding);
+            background: var(--bg-secondary);
+            position: relative;
+        }
+
+        #services::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: var(--bg-card);
+            border: 1px solid var(--slate);
+            border-radius: var(--border-radius);
+            padding: 35px 30px;
+            text-align: center;
+            transition: all var(--transition-med);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .service-card:hover::before { left: 100%; }
+
+        .service-card:hover {
+            border-color: var(--neon-green-border);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3), 0 0 20px rgba(57,255,20,0.06);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .service-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            color: var(--white);
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* ========== PROJECTS SECTION ========== */
+        #projects {
+            padding: var(--section-padding);
+            background: var(--bg-primary);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 35px;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--slate);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: all var(--transition-med);
+            position: relative;
+        }
+
+        .project-card:hover {
+            border-color: var(--neon-green);
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 0 30px rgba(57,255,20,0.1), 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .project-card:hover .project-card-header {
+            border-bottom-color: var(--neon-green-border);
+        }
+
+        /* Game UI corner accents */
+        .project-card::before,
+        .project-card::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: var(--neon-green);
+            border-style: solid;
+            opacity: 0;
+            transition: opacity var(--transition-med);
+            z-index: 2;
+        }
+
+        .project-card::before {
+            top: -1px;
+            left: -1px;
+            border-width: 2px 0 0 2px;
+        }
+
+        .project-card::after {
+            bottom: -1px;
+            right: -1px;
+            border-width: 0 2px 2px 0;
+        }
+
+        .project-card:hover::before,
+        .project-card:hover::after { opacity: 1; }
+
+        .project-card-header {
+            padding: 25px 25px 15px;
+            border-bottom: 1px solid var(--slate);
+            transition: border-color var(--transition-med);
+        }
+
+        .project-card-header .project-status {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 3px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .project-status.in-dev {
+            color: #ffbd2e;
+            border: 1px solid rgba(255, 189, 46, 0.3);
+            background: rgba(255, 189, 46, 0.1);
+        }
+
+        .project-status.completed {
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green-border);
+            background: var(--neon-green-subtle);
+        }
+
+        .project-card-header h3 {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            color: var(--white);
+            margin-bottom: 5px;
+        }
+
+        .project-card-header .project-type {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+        }
+
+        .project-card-body {
+            padding: 25px;
+        }
+
+        .project-detail {
+            margin-bottom: 18px;
+        }
+
+        .project-detail:last-child { margin-bottom: 0; }
+
+        .project-detail-label {
+            font-family: var(--font-heading);
+            font-size: 0.65rem;
+            color: var(--neon-green);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .project-detail-label::before {
+            content: '▸';
+            font-size: 0.8rem;
+        }
+
+        .project-detail p {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            line-height: 1.7;
+            padding-left: 16px;
+        }
+
+        .project-tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding-left: 16px;
+        }
+
+        .project-tool-tag {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--neon-green);
+            padding: 4px 10px;
+            border: 1px solid var(--neon-green-border);
+            border-radius: 3px;
+            background: var(--neon-green-subtle);
+        }
+
+        .project-card-footer {
+            padding: 15px 25px 20px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .project-link {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--neon-green);
+            text-decoration: none;
+            padding: 8px 18px;
+            border: 1px solid var(--neon-green-border);
+            border-radius: var(--border-radius);
+            transition: all var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .project-link:hover {
+            background: var(--neon-green);
+            color: var(--bg-primary);
+            box-shadow: 0 0 15px var(--neon-green-glow);
+        }
+
+        /* ========== ACHIEVEMENTS SECTION ========== */
+        #achievements {
+            padding: var(--section-padding);
+            background: var(--bg-secondary);
+            position: relative;
+        }
+
+        #achievements::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .achievement-card {
+            text-align: center;
+            padding: 35px 25px;
+            background: var(--bg-card);
+            border: 1px solid var(--slate);
+            border-radius: var(--border-radius);
+            transition: all var(--transition-med);
+        }
+
+        .achievement-card:hover {
+            border-color: var(--neon-green-border);
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(57,255,20,0.08);
+        }
+
+        .achievement-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .achievement-card h3 {
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .achievement-card p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* ========== TESTIMONIALS SECTION ========== */
+        #testimonials {
+            padding: var(--section-padding);
+            background: var(--bg-primary);
+        }
+
+        .testimonials-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--bg-card);
+            border: 1px solid var(--slate);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            font-family: var(--font-heading);
+            font-size: 5rem;
+            color: var(--neon-green);
+            opacity: 0.2;
+            position: absolute;
+            top: 10px;
+            left: 30px;
+            line-height: 1;
+        }
+
+        .testimonial-card p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            font-style: italic;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            color: var(--neon-green);
+            letter-spacing: 1px;
+        }
+
+        .testimonial-role {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 5px;
+        }
+
+        .testimonial-note {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px dashed var(--slate);
+            border-radius: var(--border-radius);
+        }
+                /* ========== THEME VARIABLES (LIGHT MODE) ========== */
+        :root[data-theme="light"] {
+            --bg-primary: #f4f5f7;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f8fafc;
+            
+            /* Text colors — deep forest green for gaming aesthetic + readability */
+            --text-primary: #1a2332;
+            --text-secondary: #3a5a40;
+            --text-dim: #64748b;
+            --slate: #cbd5e1;
+            --slate-light: #e2e8f0;
+            --white: #0d5c25; /* Headings use deep forest green */
+            
+            /* Toned-down glow for light backgrounds */
+            --neon-green-glow: rgba(13, 92, 37, 0.3);
+            --neon-green-border: rgba(13, 92, 37, 0.3);
+            --neon-green-subtle: rgba(13, 92, 37, 0.08);
+        }
+
+        /* ========== LIGHT MODE — NAVBAR ========== */
+        :root[data-theme="light"] .nav.scrolled {
+            background: rgba(248, 249, 250, 0.97);
+            border-bottom: 1px solid #dee2e6;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        :root[data-theme="light"] .nav-links a {
+            color: #3a5a40;
+        }
+
+        :root[data-theme="light"] .nav-links a:hover,
+        :root[data-theme="light"] .nav-links a.active {
+            color: #0d5c25;
+            border-color: rgba(13, 92, 37, 0.3);
+            background: rgba(13, 92, 37, 0.08);
+        }
+
+        :root[data-theme="light"] .nav-links a::after {
+            background: #0d5c25;
+        }
+
+        :root[data-theme="light"] .nav-logo span {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .nav-logo img {
+            border-color: #0d5c25;
+            box-shadow: 0 0 8px rgba(13, 92, 37, 0.2);
+        }
+
+        /* ========== LIGHT MODE — BUTTONS ========== */
+        :root[data-theme="light"] .btn-primary {
+            background: #2bcc0f;
+            color: #0a0a0a;
+            border-color: #2bcc0f;
+            box-shadow: 0 0 10px rgba(43, 204, 15, 0.3);
+        }
+
+        :root[data-theme="light"] .btn-primary:hover {
+            background: transparent;
+            color: #0d5c25;
+            border-color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .btn-secondary {
+            color: #0d5c25;
+            border-color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .btn-secondary:hover {
+            border-color: #0d5c25;
+            box-shadow: 0 0 15px rgba(13, 92, 37, 0.2);
+            color: #0d5c25;
+        }
+
+        /* ========== LIGHT MODE — NAV UTILITY BUTTONS ========== */
+        :root[data-theme="light"] .nav-util-btn {
+            border-color: rgba(13, 92, 37, 0.3);
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .nav-util-btn:hover {
+            border-color: #0d5c25;
+            box-shadow: 0 0 12px rgba(13, 92, 37, 0.2);
+        }
+
+        :root[data-theme="light"] .nav-contact-btn {
+            color: #0d5c25;
+            border-color: #0d5c25;
+        }
+
+        /* ========== LIGHT MODE — ACCENTS & SECTION ELEMENTS ========== */
+        :root[data-theme="light"] .section-header h2 .accent {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .section-header .section-tag {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .section-header .underline {
+            background: #0d5c25;
+            box-shadow: 0 0 8px rgba(13, 92, 37, 0.3);
+        }
+
+        :root[data-theme="light"] .hero-title {
+            color: #3a5a40;
+        }
+
+        :root[data-theme="light"] .hero-status {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .hero-status .dot {
+            background: #0d5c25;
+            box-shadow: 0 0 8px rgba(13, 92, 37, 0.3);
+        }
+
+        :root[data-theme="light"] .hero-typing-wrapper {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .typing-cursor {
+            background: #0d5c25;
+        }
+
+        :root[data-theme="light"] .hero-name .green {
+            color: #0d5c25;
+        }
+
+        /* ========== LIGHT MODE — CARDS & BORDERS ========== */
+        :root[data-theme="light"] .skill-chip {
+            color: #1a2332;
+            border-color: rgba(13, 92, 37, 0.3);
+        }
+
+        :root[data-theme="light"] .skill-chip.proficient {
+            color: #0d5c25;
+            border-color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .skill-chip:hover {
+            color: #0d5c25;
+            border-color: #0d5c25;
+            background: rgba(13, 92, 37, 0.08);
+            box-shadow: 0 0 8px rgba(13, 92, 37, 0.15);
+        }
+
+        :root[data-theme="light"] .skill-category h3 {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .stat-box .stat-num {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .about-text h3 .accent {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .edu-date {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .edu-grade {
+            color: #0d5c25;
+            border-color: rgba(13, 92, 37, 0.3);
+            background: rgba(13, 92, 37, 0.08);
+        }
+
+        :root[data-theme="light"] .exp-company {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .exp-status {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .car-label {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .project-detail-label {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .project-tool-tag {
+            color: #0d5c25;
+            border-color: rgba(13, 92, 37, 0.3);
+            background: rgba(13, 92, 37, 0.08);
+        }
+
+        :root[data-theme="light"] .project-link {
+            color: #0d5c25;
+            border-color: rgba(13, 92, 37, 0.3);
+        }
+
+        :root[data-theme="light"] .project-link:hover {
+            background: #0d5c25;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(13, 92, 37, 0.3);
+        }
+
+        :root[data-theme="light"] .contact-value {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .contact-form-title {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .mission-tag {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .footer-logo {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .footer-socials a:hover {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .testimonial-author {
+            color: #0d5c25;
+        }
+
+        /* Light mode — CRT overlay disabled for readability */
+        :root[data-theme="light"] ~ body::after,
+        [data-theme="light"] body::after {
+            opacity: 0 !important;
+            animation: none !important;
+        }
+
+        /* Light mode — neon pulse/glow toned down on images and borders */
+        :root[data-theme="light"] .hero-logo {
+            border-color: #0d5c25;
+            box-shadow: 0 0 12px rgba(13, 92, 37, 0.2);
+            animation: none;
+        }
+
+        :root[data-theme="light"] .about-image-frame {
+            border-color: rgba(13, 92, 37, 0.3);
+        }
+
+        :root[data-theme="light"] .about-image-frame::before,
+        :root[data-theme="light"] .about-image-frame::after {
+            border-color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .about-terminal .prompt {
+            color: #0d5c25;
+        }
+
+        :root[data-theme="light"] .edu-card::before {
+            border-color: #0d5c25;
+            box-shadow: 0 0 8px rgba(13, 92, 37, 0.2);
+        }
+
+        :root[data-theme="light"] .education-timeline::before {
+            background: linear-gradient(180deg, #0d5c25, rgba(13, 92, 37, 0.3), transparent);
+        }
+
+        :root[data-theme="light"] .skill-category::before {
+            background: linear-gradient(90deg, #0d5c25, transparent);
+        }
+
+        :root[data-theme="light"] #about::before,
+        :root[data-theme="light"] #skills::before,
+        :root[data-theme="light"] #services::before,
+        :root[data-theme="light"] #achievements::before,
+        :root[data-theme="light"] #contact::before {
+            background: linear-gradient(90deg, transparent, #0d5c25, transparent);
+        }
+
+        :root[data-theme="light"] .form-group input:focus,
+        :root[data-theme="light"] .form-group textarea:focus {
+            border-color: #0d5c25;
+            box-shadow: 0 0 8px rgba(13, 92, 37, 0.15);
+        }
+
+        /* ========== NAVBAR LAYOUT & UTILS ========== */
+        .nav .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 5px;
+            flex: 1;
+            justify-content: center; /* Centers the main links */
+        }
+
+        .nav-utils {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Matches the existing btn-secondary aesthetic exactly */
+        .nav-util-btn {
+            background: transparent;
+            border: 2px solid var(--neon-green-border);
+            color: var(--neon-green);
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            width: 38px;
+            height: 38px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-med);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-util-btn .lang-text {
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .nav-util-btn:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px var(--neon-green-glow);
+            transform: scale(1.05);
+            animation: glitch 0.3s ease;
+        }
+
+        .nav-contact-btn {
+            padding: 10px 20px;
+            font-size: 0.75rem;
+        }
+
+        /* Responsive adjustments for the new navbar */
+        @media (max-width: 992px) {
+            .nav-contact-btn {
+                display: none; /* Hide just the contact button to save space on tablets */
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-utils {
+                margin-right: 45px; /* Make room for the mobile hamburger toggle */
+            }
+        }
+
+        /* ========== RTL / ARABIC SUPPORT ========== */
+        [dir="rtl"] {
+            text-align: right;
+            /* The browser's native flexbox handles horizontal reversing automatically */
+        }
+        
+        /* Fix borders and padding that are direction-specific in your original CSS */
+        [dir="rtl"] .car-item {
+            border-left: none;
+            border-right: 2px solid var(--neon-green-border);
+            padding-left: 0;
+            padding-right: 20px;
+        }
+        
+        [dir="rtl"] .project-detail p,
+        [dir="rtl"] .project-tools {
+            padding-left: 0;
+            padding-right: 16px;
+        }
+
+        /* ========== CONTACT SECTION ========== */
+        #contact {
+            padding: var(--section-padding);
+            background: var(--bg-secondary);
+            position: relative;
+        }
+
+        #contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+        }
+
+        .contact-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .mission-select-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .mission-select-header .mission-tag {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--neon-green);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .mission-select-header h3 {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 25px;
+            background: var(--bg-card);
+            border: 1px solid var(--slate);
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            transition: all var(--transition-med);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-method::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(57,255,20,0.05), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .contact-method:hover::before { left: 100%; }
+
+        .contact-method:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 25px rgba(57,255,20,0.1);
+            transform: translateY(-3px);
+            animation: glitch 0.3s ease;
+        }
+
+        .contact-method-icon {
+            font-size: 1.8rem;
+            min-width: 45px;
+            text-align: center;
+        }
+
+        .contact-method-info .contact-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .contact-method-info .contact-value {
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--neon-green);
+            margin-top: 3px;
+        }
+
+        .contact-form-wrapper {
+            background: var(--bg-card);
+            border: 1px solid var(--slate);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            position: relative;
+        }
+
+        .contact-form-wrapper::before,
+        .contact-form-wrapper::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: var(--neon-green);
+            border-style: solid;
+        }
+
+        .contact-form-wrapper::before {
+            top: -1px;
+            left: -1px;
+            border-width: 2px 0 0 2px;
+        }
+
+        .contact-form-wrapper::after {
+            bottom: -1px;
+            right: -1px;
+            border-width: 0 2px 2px 0;
+        }
+
+        .contact-form-title {
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            color: var(--neon-green);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full { grid-column: 1 / -1; }
+
+        .form-group label {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            border: 1px solid var(--slate);
+            border-radius: var(--border-radius);
+            padding: 14px 18px;
+            outline: none;
+            transition: all var(--transition-fast);
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 10px rgba(57,255,20,0.15);
+        }
+
+        .form-group textarea { min-height: 120px; }
+
+        .form-submit {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .form-submit .btn {
+            border: none;
+            font-size: 0.9rem;
+            padding: 16px 50px;
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--slate);
+            text-align: center;
+            background: var(--bg-primary);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-logo {
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            color: var(--neon-green);
+            letter-spacing: 3px;
+        }
+
+        .footer-text {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-socials a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all var(--transition-fast);
+        }
+
+        .footer-socials a:hover {
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green-glow);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 900px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .hero-name { font-size: 2.5rem; }
+            .hero-title { font-size: 1rem; letter-spacing: 4px; }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h2 { font-size: 1.6rem; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background: rgba(10, 10, 10, 0.98);
+                flex-direction: column;
+                padding: 80px 30px 30px;
+                gap: 5px;
+                transition: right var(--transition-med);
+                border-left: 1px solid var(--neon-green-border);
+                backdrop-filter: blur(10px);
+            }
+
+            .nav-links.open { right: 0; }
+            .mobile-toggle { display: flex; }
+
+            .hero-name { font-size: 2rem; }
+            .hero-logo { width: 110px; height: 110px; }
+
+            .about-stats { grid-template-columns: repeat(3, 1fr); }
+
+            .exp-header { flex-direction: column; }
+            .exp-header-right { text-align: left; }
+
+            body { font-size: 16px; }
+        }
+
+        @media (max-width: 480px) {
+            .hero-name { font-size: 1.6rem; letter-spacing: 2px; }
+            .hero-title { font-size: 0.8rem; letter-spacing: 3px; }
+            .hero-logo { width: 90px; height: 90px; }
+            .hero-cta-group { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 280px; justify-content: center; }
+
+            .contact-methods { grid-template-columns: 1fr; }
+            .contact-form-wrapper { padding: 25px 20px; }
+
+            .skills-grid { grid-template-columns: 1fr; }
+            .services-grid { grid-template-columns: 1fr; }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav class="nav" id="navbar">
+        <div class="container">
+            <a href="#home" class="nav-logo">
+                <img src="logo.jpg" alt="AY Logo">
+                <span>AY</span>
+            </a>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#about" data-en="About" data-ar="من أنا">About</a></li>
+                <li><a href="#education" data-en="Education" data-ar="التعليم">Education</a></li>
+                <li><a href="#skills" data-en="Skills" data-ar="المهارات">Skills</a></li>
+                <li><a href="#experience" data-en="Experience" data-ar="الخبرات">Experience</a></li>
+                <li><a href="#services" data-en="Services" data-ar="الخدمات">Services</a></li>
+                <li><a href="#projects" data-en="Projects" data-ar="المشاريع">Projects</a></li>
+                <li><a href="#achievements" data-en="Achievements" data-ar="الإنجازات">Achievements</a></li>
+                <li><a href="#testimonials" data-en="Testimonials" data-ar="التوصيات">Testimonials</a></li>
+            </ul>
+
+            <div class="nav-utils">
+                <button class="nav-util-btn" id="themeToggle" aria-label="Toggle Theme">
+                    <span class="theme-icon">☀️</span>
+                </button>
+                <button class="nav-util-btn" id="langToggle" aria-label="Toggle Language">
+                    <span class="lang-text">AR</span>
+                </button>
+                <a href="#contact" class="btn btn-secondary nav-contact-btn" data-en="Contact Me" data-ar="تواصل معي">Contact Me</a>
+            </div>
+
+            <div class="mobile-toggle" id="mobileToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== HOME / HERO SECTION ========== -->
+    <section id="home">
+        <div class="hero-bg-grid"></div>
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="hero-content scroll-reveal">
+            <img src="logo.jpg" alt="Akrm Youssef Logo" class="hero-logo">
+            <div class="hero-status">
+                <span class="dot"></span>
+                System Online
+            </div>
+            <h1 class="hero-name">
+                <span class="green">Akrm</span> Youssef
+            </h1>
+            <p class="hero-title" data-en="GAME DEVELOPER" data-ar="مطور ألعاب">Game Developer</p>
+            <div class="hero-typing-wrapper">
+                <span class="hero-typing" id="heroTyping"></span><span class="typing-cursor"></span>
+            </div>
+            <div class="hero-cta-group">
+                <a href="#projects" class="btn btn-primary" data-en="▶ View Projects" data-ar="▶ عرض المشاريع">▶ View Projects</a>
+                <a href="Akrm_Youssef_Resume.pdf" class="btn btn-secondary" data-en="◆ Download Resume" data-ar="◆ تحميل السيرة الذاتية" download>◆ Download Resume</a>
+            </div>
+        </div>
+        <div class="hero-scroll-indicator">
+            <span>Scroll</span>
+            <div class="arrow"></div>
+        </div>
+    </section>
+
+    <!-- ========== ABOUT SECTION ========== -->
+    <section id="about">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-tag" data-en="// Player Profile" data-ar="// ملف اللاعب">// Player Profile</span>
+                <h2 data-en="About Me" data-ar="من أنا">About <span class="accent">Me</span></h2>
+                <span class="underline"></span>
+            </div>
+            <div class="about-grid">
+                <div class="about-image-wrapper scroll-reveal">
+                    <div class="about-image-frame">
+                        <img src="logo.jpg" alt="Akrm Youssef">
+                    </div>
+                    <div class="about-stats">
+                        <div class="stat-box">
+                            <div class="stat-num">2+</div>
+                            <div class="stat-label" data-en="Years Exp" data-ar="سنوات خبرة">Years Exp</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-num">3+</div>
+                            <div class="stat-label" data-en="Projects" data-ar="مشاريع">Projects</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-num">5+</div>
+                            <div class="stat-label" data-en="Skills" data-ar="مهارات">Skills</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-text scroll-reveal">
+                    <h3 data-en="Game Developer & Problem Solver" data-ar="مطور ألعاب ومبتكر حلول">Game Developer <span class="accent">&amp;</span> Problem Solver</h3>
+                    <p data-en="Great ideas need flawless execution. I am a Game Developer who turns creative concepts into engaging, interactive experiences. I help companies and studios achieve seamless, high-quality games through a highly organized and structured development process. Over the past two years, I have actively honed my skills in building robust gameplay mechanics and solving complex development challenges. I focus on writing clean, maintainable code to ensure that every project I touch remains stable from the first prototype to the final launch." data-ar="الأفكار العظيمة تحتاج إلى تنفيذ دقيق. أنا مطور ألعاب أحول الرؤى الإبداعية إلى تجارب تفاعلية جذابة. أساعد الشركات والاستوديوهات على إنتاج ألعاب سلسة وعالية الجودة من خلال عملية تطوير منظمة ومدروسة بدقة. على مدار عامين من الخبرة العملية، قمت بتطوير مهاراتي في بناء ميكانيكيات لعب متماسكة وحل تحديات البرمجة المعقدة. أركز دائماً على كتابة أكواد برمجية نظيفة وقابلة للتطوير لضمان استقرار أي مشروع أعمل عليه منذ النسخة الأولية وحتى الإطلاق النهائي.">Great ideas need flawless execution. I am a Game Developer who turns creative concepts into engaging, interactive experiences. I help companies and studios achieve seamless, high-quality games through a highly organized and structured development process. Over the past two years, I have actively honed my skills in building robust gameplay mechanics and solving complex development challenges. I focus on writing clean, maintainable code to ensure that every project I touch remains stable from the first prototype to the final launch.</p>
+
+                    <div class="about-terminal">
+                        <div class="terminal-header">
+                            <span class="terminal-dot red"></span>
+                            <span class="terminal-dot yellow"></span>
+                            <span class="terminal-dot green"></span>
+                        </div>
+                        <div class="terminal-line"><span class="prompt">player.name</span> = <span class="value" data-en='"Akrm Youssef Muhammed"' data-ar='"أكرم يوسف محمد"'>"Akrm Youssef Muhammed"</span></div>
+                        <div class="terminal-line"><span class="prompt">player.class</span> = <span class="value" data-en='"Game Developer"' data-ar='"مطور ألعاب"'>"Game Developer"</span></div>
+                        <div class="terminal-line"><span class="prompt">player.location</span> = <span class="value" data-en='"Alexandria, Egypt"' data-ar='"الإسكندرية، مصر"'>"Alexandria, Egypt"</span></div>
+                        <div class="terminal-line"><span class="prompt">player.status</span> = <span class="value" style="color: var(--neon-green);" data-en='"Ready for Co-op"' data-ar='"جاهز للعمل المشترك"'>"Ready for Co-op"</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== EDUCATION SECTION ========== -->
+    <section id="education">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-tag" data-en="// Skill Tree" data-ar="// شجرة المهارات">// Skill Tree</span>
+                <h2 data-en="Education" data-ar="التعليم">Edu<span class="accent">cation</span></h2>
+                <span class="underline"></span>
+            </div>
+            <div class="education-timeline scroll-reveal">
+                <div class="edu-card">
+                    <div class="edu-date" data-en="2023 – June 2027 (Expected)" data-ar="2023 – يونيو 2027 (المتوقع)">2023 – June 2027 (Expected)</div>
+                    <h3 data-en="Bachelor of Science" data-ar="بكالوريوس العلوم">Bachelor of Science</h3>
+                    <p class="edu-institution" data-en="Software Industry and Multimedia — Alexandria University" data-ar="صناعة البرمجيات والوسائط المتعددة — كلية العلوم، جامعة الإسكندرية">Software Industry and Multimedia — Alexandria University</p>
+                    <span class="edu-grade" data-en="★ Grade: Very Good" data-ar="★ التقدير: جيد جداً">★ Grade: Very Good</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SKILLS SECTION ========== -->
+    <section id="skills">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-tag" data-en="// Inventory" data-ar="// المخزون">// Inventory</span>
+                <h2 data-en="My Skills" data-ar="مهاراتي">My <span class="accent">Skills</span></h2>
+                <span class="underline"></span>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-category scroll-reveal">
+                    <span class="skill-category-icon">🎮</span>
+                    <h3 data-en="Game Engines" data-ar="محركات الألعاب">Game Engines</h3>
+                    <div class="skill-chips">
+                        <span class="skill-chip proficient" data-en="Unity 3D & 2D" data-ar="محرك Unity ولغة C# (البرمجة كائنية التوجه - OOP)">Unity 3D & 2D</span>
+                        <span class="skill-chip" data-en="Godot" data-ar="Godot">Godot</span>
+                    </div>
+                </div>
+                <div class="skill-category scroll-reveal">
+                    <span class="skill-category-icon">💻</span>
+                    <h3 data-en="Programming" data-ar="البرمجة">Programming</h3>
+                    <div class="skill-chips">
+                        <span class="skill-chip proficient" data-en="C#" data-ar="C#">C#</span>
+                        <span class="skill-chip" data-en="Java" data-ar="Java">Java</span>
+                        <span class="skill-chip" data-en="Python" data-ar="Python">Python</span>
+                        <span class="skill-chip" data-en="Flutter" data-ar="Flutter">Flutter</span>
+                    </div>
+                </div>
+                <div class="skill-category scroll-reveal">
+                    <span class="skill-category-icon">🎨</span>
+                    <h3 data-en="3D Modeling" data-ar="النمذجة ثلاثية الأبعاد">3D Modeling</h3>
+                    <div class="skill-chips">
+                        <span class="skill-chip" data-en="Blender" data-ar="برنامج Blender">Blender</span>
+                    </div>
+                </div>
+                <div class="skill-category scroll-reveal">
+                    <span class="skill-category-icon">🔧</span>
+                    <h3 data-en="Tools & Platforms" data-ar="الأدوات والمنصات">Tools & Platforms</h3>
+                    <div class="skill-chips">
+                        <span class="skill-chip proficient" data-en="GitHub" data-ar="نظام Git للتحكم في الإصدارات">GitHub</span>
+                        <span class="skill-chip proficient" data-en="Notion" data-ar="Notion">Notion</span>
+                    </div>
+                </div>
+                <div class="skill-category scroll-reveal">
+                    <span class="skill-category-icon">🌍</span>
+                    <h3 data-en="Languages" data-ar="اللغات">Languages</h3>
+                    <div class="skill-chips">
+                        <span class="skill-chip proficient" data-en="Arabic (Native)" data-ar="العربية (اللغة الأم)">Arabic (Native)</span>
+                        <span class="skill-chip proficient" data-en="English (Very Good)" data-ar="الإنجليزية (جيد جداً)">English (Very Good)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== EXPERIENCE SECTION ========== -->
+    <section id="experience">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-tag" data-en="// Quest Log" data-ar="// سجل المهام">// Quest Log</span>
+                <h2 data-en="Experience" data-ar="الخبرات">Exper<span class="accent">ience</span></h2>
+                <span class="underline"></span>
+            </div>
+            <div class="experience-card scroll-reveal">
+                <div class="exp-header">
+                    <div class="exp-header-left">
+                        <h3 data-en="Game Development Intern" data-ar="متدرب تطوير ألعاب">Game Development Intern</h3>
+                        <span class="exp-company" data-en="Digital Egypt Pioneers" data-ar="رواد مصر الرقمية">Digital Egypt Pioneers</span>
+                    </div>
+                    <div class="exp-header-right">
+                        <span class="exp-date" data-en="July 2026 – Present" data-ar="يوليو 2026 - الحاضر">July 2026 – Present</span>
+                        <span class="exp-status"><span class="dot"></span> <span data-en="Active Quest" data-ar="مهمة نشطة">Active Quest</span></span>
+                    </div>
+                </div>
+                <div class="exp-body">
+                    <div class="car-item">
+                        <div class="car-label" data-en="⚔ Challenge" data-ar="⚔ التحدي">⚔ Challenge</div>
+                        <p data-en="Needed to build functional, user-friendly game systems from scratch — including UI menus, gameplay mechanics, and immersive 3D environments — within a professional development pipeline." data-ar="الحاجة لبناء أنظمة ألعاب عملية وسهلة الاستخدام من الصفر - بما في ذلك قوائم واجهة المستخدم، ميكانيكيات اللعب، وبيئات ثلاثية الأبعاد غامرة - ضمن بيئة تطوير احترافية.">Needed to build functional, user-friendly game systems from scratch — including UI menus, gameplay mechanics, and immersive 3D environments — within a professional development pipeline.</p>
+                    </div>
+                    <div class="car-item">
+                        <div class="car-label" data-en="🛠 Action" data-ar="🛠 الإجراء">🛠 Action</div>
+                        <p data-en="Programmed a complete, dynamic main menu system with scene management and settings configuration using Unity and C#. Engineered core gameplay mechanics including a player controller and collision-based collectible systems. Designed and sculpted 3D game environments and playable maps using Unity Terrain tools." data-ar="برمجة نظام قائمة رئيسية ديناميكي متكامل مع إدارة المشاهد وتكوين الإعدادات باستخدام Unity و C#. هندسة ميكانيكيات اللعب الأساسية بما في ذلك متحكم اللاعب وأنظمة تجميع العناصر المعتمدة على الاصطدام. تصميم ونحت بيئات ألعاب ثلاثية الأبعاد وخرائط قابلة للعب باستخدام أدوات Unity Terrain.">Programmed a complete, dynamic main menu system with scene management and settings configuration using Unity and C#. Engineered core gameplay mechanics including a player controller and collision-based collectible systems. Designed and sculpted 3D game environments and playable maps using Unity Terrain tools.</p>
+                    </div>
+                    <div class="car-item">
+                        <div class="car-label" data-en="🏆 Result" data-ar="🏆 النتيجة">🏆 Result</div>
+                        <p data-en="Delivered polished, integrated game systems that enhanced the overall project quality. Gained hands-on experience in a real development workflow, strengthening skills in UI programming, gameplay engineering, and 3D environment design." data-ar="تقديم أنظمة ألعاب مصقولة ومتكاملة عززت الجودة العامة للمشروع. اكتساب خبرة عملية في بيئة تطوير حقيقية، مما عزز المهارات في برمجة واجهة المستخدم، هندسة أسلوب اللعب، وتصميم البيئات ثلاثية الأبعاد.">Delivered polished, integrated game systems that enhanced the overall project quality. Gained hands-on experience in a real development workflow, strengthening skills in UI programming, gameplay engineering, and 3D environment design.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SERVICES SECTION ========== -->
+    <section id="services">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-tag" data-en="// Abilities" data-ar="// القدرات">// Abilities</span>
+                <h2 data-en="My Services" data-ar="خدماتي">My <span class="accent">Services</span></h2>
+                <span class="underline"></span>
+            </div>
+            <div class="services-grid">
+                <div class="service-card scroll-reveal">
+                    <span class="service-icon">🎮</span>
+                    <h3 data-en="Game Development" data-ar="تطوير الألعاب">Game Development</h3>
+                    <p data-en="End-to-end game development using Unity (2D & 3D). From prototyping gameplay mechanics to building complete, polished games ready for release." data-ar="تطوير الألعاب من البداية للنهاية باستخدام محرك Unity (ثنائي وثلاثي الأبعاد). من بناء النماذج الأولية لميكانيكيات اللعب إلى بناء ألعاب كاملة ومصقولة جاهزة للإطلاق.">End-to-end game development using Unity (2D & 3D). From prototyping gameplay mechanics to building complete, polished games ready for release.</p>
+                </div>
+                <div class="service-card scroll-reveal">
+                    <span class="service-icon">⚙️</span>
+                    <h3 data-en="Gameplay Programming" data-ar="برمجة أسلوب اللعب">Gameplay Programming</h3>
+                    <p data-en="Writing clean, optimized C# code for player controllers, combat systems, AI behaviors, collectibles, and core game loops." data-ar="كتابة أكواد C# نظيفة ومحسنة لمتحكمات اللاعب، أنظمة القتال، سلوكيات الذكاء الاصطناعي، العناصر القابلة للجمع، وحلقات اللعب الأساسية.">Writing clean, optimized C# code for player controllers, combat systems, AI behaviors, collectibles, and core game loops.</p>
+                </div>
+                <div class="service-card scroll-reveal">
+                    <span class="service-icon">🖥️</span>
+                    <h3 data-en="Game UI Systems" data-ar="أنظمة واجهات المستخدم للألعاب">Game UI Systems</h3>
+                    <p data-en="Designing and programming dynamic, responsive UI systems — menus, HUDs, settings panels, and scene management flows." data-ar="تصميم وبرمجة أنظمة واجهات مستخدم ديناميكية وسريعة الاستجابة - القوائم، شاشات العرض (HUDs)، لوحات الإعدادات، وإدارة تدفق المشاهد.">Designing and programming dynamic, responsive UI systems — menus, HUDs, settings panels, and scene management flows.</p>
+                </div>
+                <div class="service-card scroll-reveal">
+                    <span class="service-icon">🏔️</span>
+                    <h3 data-en="3D Environment Design" data-ar="تصميم البيئات ثلاثية الأبعاد">3D Environment Design</h3>
+                    <p data-en="Creating immersive 3D game worlds and maps using Unity Terrain tools and Blender, bringing game environments to life." data-ar="إنشاء عوالم وخرائط ألعاب ثلاثية الأبعاد غامرة باستخدام أدوات Unity Terrain و Blender، لإضفاء الحيوية على بيئات اللعب.">Creating immersive 3D game worlds and maps using Unity Terrain tools and Blender, bringing game environments to life.</p>
+                </div>
+                <div class="service-card scroll-reveal">
+                    <span class="service-icon">🧩</span>
+                    <h3 data-en="Game Prototyping" data-ar="النماذج الأولية للألعاب">Game Prototyping</h3>
+                    <p data-en="Rapid prototyping of game concepts to test and validate core gameplay loops, mechanics, and player experiences." data-ar="بناء نماذج أولية سريعة لأفكار الألعاب لاختبار والتحقق من حلقات اللعب الأساسية، الميكانيكيات، وتجارب اللاعبين.">Rapid prototyping of game concepts to test and validate core gameplay loops, mechanics, and player experiences.</p>
+                </div>
+                <div class="service-card scroll-reveal">
+                    <span class="service-icon">🤝</span>
+                    <h3 data-en="Team Collaboration" data-ar="التعاون الجماعي">Team Collaboration</h3>
+                    <p data-en="Working efficiently in team environments using GitHub for version control and Notion for project management and documentation." data-ar="العمل بكفاءة ضمن فرق العمل باستخدام GitHub للتحكم في الإصدارات و Notion لإدارة المشاريع والتوثيق.">Working efficiently in team environments using GitHub for version control and Notion for project management and documentation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== PROJECTS SECTION ========== -->
+    <section id="projects">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-tag" data-en="// Mission Database" data-ar="// قاعدة بيانات المهام">// Mission Database</span>
+                <h2 data-en="My Projects" data-ar="مشاريعي">My <span class="accent">Projects</span></h2>
+                <span class="underline"></span>
+            </div>
+            <div class="projects-grid">
+
+                <!-- Project 1: TimeRewind -->
+                <div class="project-card scroll-reveal">
+                    <div class="project-card-header">
+                        <span class="project-status in-dev" data-en="⏳ In Development" data-ar="⏳ قيد التطوير">⏳ In Development</span>
+                        <h3>TimeRewind</h3>
+                        <span class="project-type" data-en="Time-Manipulation Puzzle Game" data-ar="لعبة ألغاز التلاعب بالزمن">Time-Manipulation Puzzle Game</span>
+                    </div>
+                    <div class="project-card-body">
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="Problem" data-ar="المشكلة">Problem</div>
+                            <p data-en="Puzzle games often lack truly unique mechanics. Players need an innovative core loop that challenges them to think differently about time and causality." data-ar="غالباً ما تفتقر ألعاب الألغاز إلى ميكانيكيات فريدة حقاً. يحتاج اللاعبون إلى حلقة أساسية مبتكرة تتحداهم للتفكير بشكل مختلف حول الزمن والسببية.">Puzzle games often lack truly unique mechanics. Players need an innovative core loop that challenges them to think differently about time and causality.</p>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="My Role" data-ar="دوري">My Role</div>
+                            <p data-en="Solo Developer — designing, engineering, and building the entire game from concept to execution." data-ar="مطور مستقل - تصميم، هندسة، وبناء اللعبة بالكامل من الفكرة إلى التنفيذ.">Solo Developer — designing, engineering, and building the entire game from concept to execution.</p>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="Solution" data-ar="الحل">Solution</div>
+                            <p data-en="Developing a puzzle-adventure game centered around a custom time-reversal mechanic. Engineering systems to record and reverse environmental states, allowing players to interact with past objects to prevent future disasters." data-ar="تطوير لعبة مغامرات وألغاز تتمحور حول ميكانيكية مخصصة لعكس الزمن. هندسة أنظمة لتسجيل وعكس حالات البيئة، مما يسمح للاعبين بالتفاعل مع أشياء من الماضي لمنع كوارث مستقبلية.">Developing a puzzle-adventure game centered around a custom time-reversal mechanic. Engineering systems to record and reverse environmental states, allowing players to interact with past objects to prevent future disasters.</p>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="Tools Used" data-ar="الأدوات المستخدمة">Tools Used</div>
+                            <div class="project-tools">
+                                <span class="project-tool-tag">Unity</span>
+                                <span class="project-tool-tag">C#</span>
+                                <span class="project-tool-tag">Blender</span>
+                            </div>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="Result" data-ar="النتيجة">Result</div>
+                            <p data-en="Currently in active development (2027). Building a unique time-manipulation system that sets the game apart from traditional puzzle titles." data-ar="قيد التطوير النشط حالياً (2027). بناء نظام فريد للتلاعب بالزمن يميز اللعبة عن ألعاب الألغاز التقليدية.">Currently in active development (2027). Building a unique time-manipulation system that sets the game apart from traditional puzzle titles.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2: ArcField -->
+                <div class="project-card scroll-reveal">
+                    <div class="project-card-header">
+                        <span class="project-status completed" data-en="✔ Completed" data-ar="✔ مكتمل">✔ Completed</span>
+                        <h3>ArcField</h3>
+                        <span class="project-type" data-en="Auto-Battler Strategy Prototype" data-ar="نموذج أولي للعبة استراتيجية قتالية تلقائية">Auto-Battler Strategy Prototype</span>
+                    </div>
+                    <div class="project-card-body">
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="Problem" data-ar="المشكلة">Problem</div>
+                            <p data-en="Needed to create a strategic auto-battler with intelligent unit behaviors, pathfinding, and distinct class-based combat on a grid system." data-ar="الحاجة لإنشاء لعبة قتال تلقائي استراتيجية مع سلوكيات وحدات ذكية، تحديد مسارات، وقتال فئات مميز على نظام شبكي.">Needed to create a strategic auto-battler with intelligent unit behaviors, pathfinding, and distinct class-based combat on a grid system.</p>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="My Role" data-ar="دوري">My Role</div>
+                            <p data-en="Co-Developer — University Project (2026). Responsible for core gameplay programming and AI systems." data-ar="مطور مساعد - مشروع جامعي (2026). مسؤول عن برمجة أسلوب اللعب الأساسي وأنظمة الذكاء الاصطناعي.">Co-Developer — University Project (2026). Responsible for core gameplay programming and AI systems.</p>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="Solution" data-ar="الحل">Solution</div>
+                            <p data-en="Developed a grid-based auto-battler with AI opponents and automated combat. Programmed three distinct unit classes (Tank, Ranged, Mage) with unique behaviors. Implemented an A* pathfinding algorithm for efficient grid navigation and enemy engagement. Integrated external 3D assets for rapid prototyping." data-ar="تطوير لعبة قتال تلقائي شبكية مع خصوم بذكاء اصطناعي وقتال آلي. برمجة ثلاث فئات وحدات مميزة (دبابة، بعيد المدى، ساحر) بسلوكيات فريدة. تنفيذ خوارزمية A* لتحديد المسارات لتنقل شبكي فعال والاشتباك مع الأعداء. دمج أصول ثلاثية الأبعاد خارجية لسرعة بناء النموذج الأولي.">Developed a grid-based auto-battler with AI opponents and automated combat. Programmed three distinct unit classes (Tank, Ranged, Mage) with unique behaviors. Implemented an A* pathfinding algorithm for efficient grid navigation and enemy engagement. Integrated external 3D assets for rapid prototyping.</p>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="Tools Used" data-ar="الأدوات المستخدمة">Tools Used</div>
+                            <div class="project-tools">
+                                <span class="project-tool-tag">Unity</span>
+                                <span class="project-tool-tag">C#</span>
+                            </div>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="Result" data-ar="النتيجة">Result</div>
+                            <p data-en="Delivered a fully functional auto-battler prototype with intelligent AI, class-based strategy, and smooth grid pathfinding. Successfully tested and validated core gameplay loops." data-ar="تقديم نموذج أولي فعال بالكامل للعبة قتال تلقائي مع ذكاء اصطناعي، استراتيجية فئات، وتحديد مسارات شبكي سلس. تم اختبار والتحقق من حلقات أسلوب اللعب الأساسية بنجاح.">Delivered a fully functional auto-battler prototype with intelligent AI, class-based strategy, and smooth grid pathfinding. Successfully tested and validated core gameplay loops.</p>
+                        </div>
+                    </div>
+                    <div class="project-card-footer">
+                        <a href="https://github.com/Kirto75/Arcfield" target="_blank" class="project-link" data-en="⬡ GitHub Repo" data-ar="⬡ مستودع GitHub">⬡ GitHub Repo</a>
+                    </div>
+                </div>
+
+                <!-- Project 3: Dunty -->
+                <div class="project-card scroll-reveal">
+                    <div class="project-card-header">
+                        <span class="project-status completed" data-en="✔ Completed" data-ar="✔ مكتمل">✔ Completed</span>
+                        <h3>Dunty</h3>
+                        <span class="project-type" data-en="3D Action Roguelike Prototype" data-ar="نموذج أولي للعبة أكشن روجلايك ثلاثية الأبعاد">3D Action Roguelike Prototype</span>
+                    </div>
+                    <div class="project-card-body">
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="Problem" data-ar="المشكلة">Problem</div>
+                            <p data-en="Needed to build a responsive 3D action game with fluid movement, camera controls, and engaging enemy encounters from scratch." data-ar="الحاجة لبناء لعبة أكشن ثلاثية الأبعاد سريعة الاستجابة مع حركة سلسة، تحكم بالكاميرا، ومواجهات أعداء ممتعة من الصفر.">Needed to build a responsive 3D action game with fluid movement, camera controls, and engaging enemy encounters from scratch.</p>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="My Role" data-ar="دوري">My Role</div>
+                            <p data-en="Co-Developer — University Project (2024). Handled player systems, enemy AI, and asset integration." data-ar="مطور مساعد - مشروع جامعي (2024). توليت أنظمة اللاعب، ذكاء الأعداء الاصطناعي، ودمج الأصول.">Co-Developer — University Project (2024). Handled player systems, enemy AI, and asset integration.</p>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="Solution" data-ar="الحل">Solution</div>
+                            <p data-en="Engineered responsive 3D player movement and camera controls using Unity and C#. Programmed simple enemy AI behaviors to create interactive combat encounters. Integrated pre-made 3D assets and animations to construct a functional testing environment." data-ar="هندسة حركة لاعب ثلاثية الأبعاد سريعة الاستجابة وتحكم بالكاميرا باستخدام Unity و C#. برمجة سلوكيات ذكاء اصطناعي بسيطة للأعداء لخلق مواجهات قتالية تفاعلية. دمج أصول ورسوم متحركة ثلاثية الأبعاد جاهزة لبناء بيئة اختبار فعالة.">Engineered responsive 3D player movement and camera controls using Unity and C#. Programmed simple enemy AI behaviors to create interactive combat encounters. Integrated pre-made 3D assets and animations to construct a functional testing environment.</p>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="Tools Used" data-ar="الأدوات المستخدمة">Tools Used</div>
+                            <div class="project-tools">
+                                <span class="project-tool-tag">Unity</span>
+                                <span class="project-tool-tag">C#</span>
+                            </div>
+                        </div>
+                        <div class="project-detail">
+                            <div class="project-detail-label" data-en="Result" data-ar="النتيجة">Result</div>
+                            <p data-en="Delivered a functional 3D action roguelike prototype with smooth player controls, enemy AI combat, and a complete testing environment." data-ar="تقديم نموذج أولي فعال للعبة أكشن روجلايك ثلاثية الأبعاد مع تحكم سلس للاعب، قتال مع أعداء بذكاء اصطناعي، وبيئة اختبار كاملة.">Delivered a functional 3D action roguelike prototype with smooth player controls, enemy AI combat, and a complete testing environment.</p>
+                        </div>
+                    </div>
+                    <div class="project-card-footer">
+                        <a href="https://github.com/Kirto75/Dunty" target="_blank" class="project-link" data-en="⬡ GitHub Repo" data-ar="⬡ مستودع GitHub">⬡ GitHub Repo</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== ACHIEVEMENTS SECTION ========== -->
+    <section id="achievements">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-tag" data-en="// Trophies" data-ar="// الجوائز">// Trophies</span>
+                <h2 data-en="Achievements" data-ar="الإنجازات">Achiev<span class="accent">ements</span></h2>
+                <span class="underline"></span>
+            </div>
+            <div class="achievements-grid">
+                <div class="achievement-card scroll-reveal">
+                    <span class="achievement-icon">🎓</span>
+                    <h3 data-en="Academic Excellence" data-ar="تفوق أكاديمي">Academic Excellence</h3>
+                    <p data-en='Maintaining a "Very Good" grade throughout the Bachelor&apos;s program in Software Industry and Multimedia.' data-ar='الحفاظ على تقدير "جيد جداً" طوال فترة دراسة البكالوريوس في صناعة البرمجيات والوسائط المتعددة.'>Maintaining a "Very Good" grade throughout the Bachelor's program in Software Industry and Multimedia.</p>
+                </div>
+                <div class="achievement-card scroll-reveal">
+                    <span class="achievement-icon">🏢</span>
+                    <h3 data-en="Industry Experience" data-ar="خبرة في الصناعة">Industry Experience</h3>
+                    <p data-en="Selected for the Digital Egypt Pioneers internship program — gaining professional game development experience." data-ar='تم اختياري لبرنامج التدريب الداخلي "رواد مصر الرقمية" - لاكتساب خبرة مهنية في تطوير الألعاب.'>Selected for the Digital Egypt Pioneers internship program — gaining professional game development experience.</p>
+                </div>
+                <div class="achievement-card scroll-reveal">
+                    <span class="achievement-icon">🚀</span>
+                    <h3 data-en="3+ Games Built" data-ar="ألعاب تم تطويرها +3">3+ Games Built</h3>
+                    <p data-en="Successfully developed and delivered multiple game prototypes across different genres — from puzzles to auto-battlers to action roguelikes." data-ar="تطوير وتقديم عدة نماذج أولية لألعاب بنجاح عبر أنواع مختلفة - من الألغاز إلى القتال التلقائي إلى أكشن روجلايك.">Successfully developed and delivered multiple game prototypes across different genres — from puzzles to auto-battlers to action roguelikes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TESTIMONIALS SECTION ========== -->
+    <section id="testimonials">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-tag" data-en="// Reputation" data-ar="// السمعة">// Reputation</span>
+                <h2 data-en="Testimonials" data-ar="التوصيات">Test<span class="accent">imonials</span></h2>
+                <span class="underline"></span>
+            </div>
+            <div class="testimonials-wrapper scroll-reveal">
+                <!-- <div class="testimonial-card">
+                    <p>Akrm brings a rare combination of technical discipline and creative passion to game development. His code is clean, his work ethic is strong, and he's always looking for ways to push the project further.</p>
+                    <div class="testimonial-author">— Team Peers &amp; Collaborators</div>
+                    <div class="testimonial-role">University Project Partners</div>
+                </div> -->
+                <div class="testimonial-note" data-en="⚡ More testimonials will be unlocked as new quests are completed. Stay tuned!" data-ar="⚡ سيتم فتح المزيد من التوصيات مع إنجاز مهام جديدة. ابقوا معنا!">
+                    ⚡ More testimonials will be unlocked as new quests are completed. Stay tuned!
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CONTACT SECTION ========== -->
+    <section id="contact">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-tag" data-en="// Comms Channel" data-ar="// قناة الاتصال">// Comms Channel</span>
+                <h2 data-en="Contact" data-ar="تواصل معي">Con<span class="accent">tact</span></h2>
+                <span class="underline"></span>
+            </div>
+            <div class="contact-wrapper">
+                <div class="mission-select-header scroll-reveal">
+                    <span class="mission-tag" data-en="▶ Mission Select" data-ar="▶ اختيار المهمة">▶ Mission Select</span>
+                    <h3 data-en="Choose your communication channel to begin" data-ar="اختر قناة الاتصال الخاصة بك للبدء">Choose your communication channel to begin</h3>
+                </div>
+                <div class="contact-methods scroll-reveal">
+                    <a href="mailto:Akrmyoussef75@gmail.com" class="contact-method">
+                        <span class="contact-method-icon">✉</span>
+                        <div class="contact-method-info">
+                            <span class="contact-label" data-en="Email" data-ar="البريد الإلكتروني">Email</span>
+                            <div class="contact-value">Akrmyoussef75@gmail.com</div>
+                        </div>
+                    </a>
+                    <a href="https://linkedin.com/in/akrm-youssef" target="_blank" class="contact-method">
+                        <span class="contact-method-icon">🔗</span>
+                        <div class="contact-method-info">
+                            <span class="contact-label" data-en="LinkedIn" data-ar="لينكد إن">LinkedIn</span>
+                            <div class="contact-value">akrm-youssef</div>
+                        </div>
+                    </a>
+                    <a href="https://github.com/Kirto75" target="_blank" class="contact-method">
+                        <span class="contact-method-icon">⬡</span>
+                        <div class="contact-method-info">
+                            <span class="contact-label" data-en="GitHub" data-ar="جيت هب">GitHub</span>
+                            <div class="contact-value">Kirto75</div>
+                        </div>
+                    </a>
+                    <a href="tel:+201287637119" class="contact-method">
+                        <span class="contact-method-icon">📱</span>
+                        <div class="contact-method-info">
+                            <span class="contact-label" data-en="Phone" data-ar="رقم الهاتف">Phone</span>
+                            <div class="contact-value" dir="ltr">+20 128 763 7119</div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="contact-form-wrapper scroll-reveal">
+                    <div class="contact-form-title" data-en="◆ Send Transmission ◆" data-ar="◆ إرسال رسالة ◆">◆ Send Transmission ◆</div>
+                    <form id="contactForm" onsubmit="handleFormSubmit(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name" data-en="Player Name" data-ar="اسم اللاعب">Player Name</label>
+                                <input type="text" id="name" name="name" placeholder="Enter your name..." data-en="Enter your name..." data-ar="...أدخل اسمك" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" data-en="Email Address" data-ar="البريد الإلكتروني">Email Address</label>
+                                <input type="email" id="email" name="email" placeholder="Enter your email..." data-en="Enter your email..." data-ar="...أدخل بريدك الإلكتروني" required>
+                            </div>
+                        </div>
+                        <div class="form-group full" style="margin-bottom: 20px;">
+                            <label for="subject" data-en="Mission Subject" data-ar="موضوع المهمة">Mission Subject</label>
+                            <input type="text" id="subject" name="subject" placeholder="What's the mission about?" data-en="What's the mission about?" data-ar="عن ماذا تتحدث المهمة؟">
+                        </div>
+                        <div class="form-group full">
+                            <label for="message" data-en="Message" data-ar="الرسالة">Message</label>
+                            <textarea id="message" name="message" placeholder="Describe your quest..." data-en="Describe your quest..." data-ar="...صف مهمتك" required></textarea>
+                        </div>
+                        <div class="form-submit">
+                            <button type="submit" class="btn btn-primary" data-en="▶ Launch Transmission" data-ar="▶ إطلاق الرسالة">▶ Launch Transmission</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo" data-en="AKRM YOUSSEF" data-ar="أكرم يوسف">AKRM YOUSSEF</div>
+                <div class="footer-socials">
+                    <a href="mailto:Akrmyoussef75@gmail.com" title="Email">✉</a>
+                    <a href="https://linkedin.com/in/akrm-youssef" target="_blank" title="LinkedIn">🔗</a>
+                    <a href="https://github.com/Kirto75" target="_blank" title="GitHub">⬡</a>
+                </div>
+                <div class="footer-text" data-en="© 2026 Akrm Youssef. All rights reserved. Built with passion & code." data-ar="© أكرم يوسف. جميع الحقوق محفوظة. صُنع بشغف وكود 2026.">© 2026 Akrm Youssef. All rights reserved. Built with passion & code.</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+        // ========== TYPING EFFECT ==========
+        let typeTimer = null; // Global timer ID for the typing effect
+
+        (function() {
+            const text = '> I help companies and studios achieve seamless, high-quality games through a highly organized and structured development process.';
+            const el = document.getElementById('heroTyping');
+            let i = 0;
+            const speed = 35;
+
+            function type() {
+                if (i < text.length) {
+                    el.textContent += text.charAt(i);
+                    i++;
+                    typeTimer = setTimeout(type, speed);
+                }
+            }
+
+            // Start after a small delay
+            typeTimer = setTimeout(type, 800);
+        })();
+
+        // ========== PARTICLES ==========
+        (function() {
+            const container = document.getElementById('heroParticles');
+            const count = 30;
+            for (let i = 0; i < count; i++) {
+                const p = document.createElement('div');
+                p.classList.add('particle');
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDuration = (Math.random() * 8 + 5) + 's';
+                p.style.animationDelay = (Math.random() * 5) + 's';
+                p.style.width = (Math.random() * 3 + 1) + 'px';
+                p.style.height = p.style.width;
+                container.appendChild(p);
+            }
+        })();
+
+        // ========== NAVBAR SCROLL EFFECT ==========
+        (function() {
+            const nav = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 80) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+        })();
+
+        // ========== ACTIVE NAV LINK ==========
+        (function() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-links a');
+
+            function updateActive() {
+                const scrollPos = window.scrollY + 150;
+                sections.forEach(section => {
+                    const top = section.offsetTop;
+                    const height = section.offsetHeight;
+                    const id = section.getAttribute('id');
+                    if (scrollPos >= top && scrollPos < top + height) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === '#' + id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', updateActive);
+        })();
+
+        // ========== MOBILE MENU ==========
+        (function() {
+            const toggle = document.getElementById('mobileToggle');
+            const links = document.getElementById('navLinks');
+
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+                links.classList.toggle('open');
+            });
+
+            // Close menu on link click
+            links.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    toggle.classList.remove('active');
+                    links.classList.remove('open');
+                });
+            });
+        })();
+
+        // ========== SCROLL REVEAL ==========
+        (function() {
+            const reveals = document.querySelectorAll('.scroll-reveal');
+
+            function reveal() {
+                reveals.forEach(el => {
+                    const top = el.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    if (top < windowHeight - 80) {
+                        el.classList.add('revealed');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', reveal);
+            window.addEventListener('load', reveal);
+        })();
+                // ========== THEME TOGGLE ==========
+        (function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('.theme-icon');
+            
+            themeToggle.addEventListener('click', () => {
+                const html = document.documentElement;
+                // Check current theme state
+                if (html.getAttribute('data-theme') === 'light') {
+                    html.removeAttribute('data-theme'); // Back to dark (default)
+                    themeIcon.textContent = '☀️';
+                } else {
+                    html.setAttribute('data-theme', 'light');
+                    themeIcon.textContent = '🌙';
+                }
+            });
+        })();
+
+        // ========== LANGUAGE TOGGLE (BILINGUAL ENGINE) ==========
+        (function() {
+            const langToggle = document.getElementById('langToggle');
+            const langText = langToggle.querySelector('.lang-text');
+
+            // English and Arabic typing texts for the hero
+            const typingTextEN = '> I help companies and studios achieve seamless, high-quality games through a highly organized and structured development process.';
+            const typingTextAR = '> أساعد الشركات والاستوديوهات على إنتاج ألعاب سلسة وعالية الجودة من خلال عملية تطوير منظمة ومدروسة بدقة.';
+
+            function setLanguage(lang) {
+                const html = document.documentElement;
+                const isArabic = lang === 'ar';
+
+                // 1. Set dir and lang on <html>
+                html.setAttribute('dir', isArabic ? 'rtl' : 'ltr');
+                html.setAttribute('lang', lang);
+
+                // 2. Toggle button label
+                langText.textContent = isArabic ? 'EN' : 'AR';
+
+                // 3. Swap text for every element with a data-ar attribute
+                const translatables = document.querySelectorAll('[data-ar]');
+                translatables.forEach(el => {
+                    const arText = el.getAttribute('data-ar');
+                    const enText = el.getAttribute('data-en');
+                    const tagName = el.tagName.toLowerCase();
+
+                    // For input/textarea, swap placeholder instead of textContent
+                    if (tagName === 'input' || tagName === 'textarea') {
+                        if (isArabic) {
+                            if (arText && arText.trim() !== '') {
+                                el.setAttribute('placeholder', arText);
+                            }
+                        } else {
+                            if (enText !== null && enText !== undefined) {
+                                el.setAttribute('placeholder', enText);
+                            }
+                        }
+                    } else {
+                        if (isArabic) {
+                            // Only swap if Arabic text is provided (non-empty)
+                            if (arText && arText.trim() !== '') {
+                                el.textContent = arText;
+                            }
+                        } else {
+                            // Restore English text
+                            if (enText !== null && enText !== undefined) {
+                                el.textContent = enText;
+                            }
+                        }
+                    }
+                });
+
+                // 4. Re-run the typing effect in the correct language
+                const typingEl = document.getElementById('heroTyping');
+                if (typingEl) {
+                    // Clear any in-progress typing animation
+                    clearTimeout(typeTimer);
+                    typeTimer = null;
+
+                    typingEl.textContent = '';
+                    const text = isArabic ? typingTextAR : typingTextEN;
+                    let i = 0;
+                    function type() {
+                        if (i < text.length) {
+                            typingEl.textContent += text.charAt(i);
+                            i++;
+                            typeTimer = setTimeout(type, 25);
+                        }
+                    }
+                    type();
+                }
+            }
+
+            langToggle.addEventListener('click', () => {
+                const html = document.documentElement;
+                const isCurrentlyRtl = html.getAttribute('dir') === 'rtl';
+                setLanguage(isCurrentlyRtl ? 'en' : 'ar');
+            });
+        })();
+
+        // ========== CONTACT FORM HANDLER ==========
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            // Compose mailto link
+            const mailtoLink = `mailto:Akrmyoussef75@gmail.com?subject=${encodeURIComponent(subject || 'Portfolio Contact')}&body=${encodeURIComponent('From: ' + name + '\nEmail: ' + email + '\n\n' + message)}`;
+            window.location.href = mailtoLink;
+
+            // Visual feedback
+            const btn = e.target.querySelector('.btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✔ Transmission Sent!';
+            btn.style.background = 'transparent';
+            btn.style.color = '#39ff14';
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = '';
+                btn.style.color = '';
+                e.target.reset();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
